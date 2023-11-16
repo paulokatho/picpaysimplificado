@@ -1,10 +1,7 @@
 package com.picpaysimplificado.domain.user;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -14,6 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
+@Builder
 public class User {
 
     @Id
