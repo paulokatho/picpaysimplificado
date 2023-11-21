@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -56,15 +57,15 @@ public class TransactionService {
                 .timestamp(LocalDateTime.now())
                 .build();
 
-        sender.getBalance().subtract(transaction.value());
-        receiver.getBalance().add(transaction.value());
+        sender.setBalance(sender.getBalance().subtract(transaction.value()));
+        receiver.setBalance(receiver.getBalance().add(transaction.value()));
 
         this.repository.save(newTransaction);
         this.userService.saveUser(sender);
         this.userService.saveUser(receiver);
 
         this.notificationService.sendNotification(sender, "Transação realizada com sucesso");
-
+        this.notificationService.sendNotification(sender, "Transação recebida com sucesso");
 
         return newTransaction;
     }
@@ -82,5 +83,9 @@ public class TransactionService {
             String message = (String) authorizationResponse.getBody().get("message");
             return "Autorizado".equalsIgnoreCase(message);
         } else return false;
+    }
+
+    public List<Transaction> getAllTransactions() {
+        return this.repository.findAll();
     }
 }
